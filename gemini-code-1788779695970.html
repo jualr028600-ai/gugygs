@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie link bds | Stream & Download Movies & Anime</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Liquid Glass Theme Specific Styles */
+    body {
+      background: #0f172a;
+      color: #f8fafc;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Liquid Glowing Orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+      animation: float 10s ease-in-out infinite alternate;
+    }
+    .orb-1 {
+      width: 350px;
+      height: 350px;
+      background: rgba(168, 85, 247, 0.4);
+      top: -50px;
+      left: -50px;
+    }
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      background: rgba(59, 130, 246, 0.35);
+      bottom: 50px;
+      right: -100px;
+    }
+    .orb-3 {
+      width: 300px;
+      height: 300px;
+      background: rgba(236, 72, 153, 0.3);
+      top: 40%;
+      left: 30%;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) scale(1); }
+      100% { transform: translateY(30px) scale(1.08); }
+    }
+
+    /* Glass Container Styling */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .glass-nav {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .glass-input {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .glass-input:focus {
+      outline: none;
+      border-color: rgba(168, 85, 247, 0.8);
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+    }
+  </style>
+</head>
+<body class="min-h-screen relative flex flex-col">
+
+  <!-- Background Liquid Glow Orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="glass-nav fixed top-0 left-0 right-0 z-40 px-6 py-4 flex justify-between items-center">
+    <div class="text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 cursor-pointer" onclick="showSection('user-site')">
+      Movie link bds
+    </div>
+    <div class="flex items-center gap-4">
+      <button onclick="showSection('user-site')" class="text-sm font-semibold hover:text-purple-400 transition">Home</button>
+      <button onclick="openAdminPortal()" class="px-4 py-2 text-sm font-bold glass-card rounded-xl hover:bg-white/20 transition border border-white/20">
+        Admin Portal
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <div class="relative z-10 pt-24 px-6 max-w-7xl mx-auto w-full flex-grow pb-12">
+
+    <!-- USER SECTION: Public Movie / Anime Gallery -->
+    <section id="user-site">
+      <div class="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+          <h1 class="text-3xl font-extrabold text-white">Stream & Download Free</h1>
+          <p class="text-gray-400 text-sm mt-1">Watch high quality movies and anime for free on Movie link bds.</p>
+        </div>
+        <!-- Search Bar -->
+        <input type="text" id="searchInput" oninput="filterVideos()" placeholder="Search movies or anime..." class="glass-input px-4 py-2 rounded-xl text-sm w-full md:w-64">
+      </div>
+
+      <!-- Movie Cards Grid -->
+      <div id="videoGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <!-- Videos will render here dynamically -->
+      </div>
+    </section>
+
+    <!-- ADMIN SECTION: Separate Page -->
+    <section id="admin-site" class="hidden">
+      <!-- Admin Login Box -->
+      <div id="adminLoginBox" class="max-w-md mx-auto my-12 glass-card p-8 rounded-2xl">
+        <h2 class="text-2xl font-bold mb-4 text-center">Admin Access</h2>
+        <p class="text-sm text-gray-400 mb-6 text-center">Enter your Admin Passcode to manage site content.</p>
+        <input type="password" id="adminPasscode" placeholder="Enter Admin Password" class="glass-input w-full px-4 py-3 rounded-xl mb-4 text-center">
+        <button onclick="verifyAdmin()" class="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 font-bold rounded-xl shadow-lg transition">
+          Unlock Admin Panel
+        </button>
+      </div>
+
+      <!-- Admin Management Dashboard -->
+      <div id="adminDashboard" class="hidden space-y-8">
+        <div class="flex justify-between items-center">
+          <h2 class="text-3xl font-bold">Admin Panel</h2>
+          <button onclick="lockAdmin()" class="px-4 py-2 bg-red-500/20 text-red-300 border border-red-500/30 rounded-xl text-sm hover:bg-red-500/30">Lock Admin Session</button>
+        </div>
+
+        <!-- Add Video Form -->
+        <div class="glass-card p-6 rounded-2xl">
+          <h3 class="text-xl font-bold mb-4 text-purple-300">Upload New Title</h3>
+          <form id="uploadForm" onsubmit="handleAddVideo(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-gray-300 mb-1">Title</label>
+              <input type="text" id="videoTitle" required placeholder="e.g., Cyberpunk Animated" class="glass-input w-full px-4 py-2 rounded-xl text-sm">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-300 mb-1">Category</label>
+              <select id="videoCategory" class="glass-input w-full px-4 py-2 rounded-xl text-sm bg-slate-900">
+                <option value="Anime">Anime</option>
+                <option value="Movie">Movie</option>
+              </select>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-xs text-gray-300 mb-1">Poster Image URL</label>
+              <input type="url" id="videoPoster" required placeholder="https://example.com/poster.jpg" class="glass-input w-full px-4 py-2 rounded-xl text-sm">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-xs text-gray-300 mb-1">Video Stream URL (.mp4 or direct video link)</label>
+              <input type="url" id="videoUrl" required placeholder="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" class="glass-input w-full px-4 py-2 rounded-xl text-sm">
+            </div>
+            <div class="md:col-span-2">
+              <button type="submit" class="w-full py-3 bg-purple-600 hover:bg-purple-500 font-bold rounded-xl transition mt-2">
+                Publish Video
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Manage Uploaded Content -->
+        <div class="glass-card p-6 rounded-2xl">
+          <h3 class="text-xl font-bold mb-4">Manage Content</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-gray-300">
+              <thead class="text-xs uppercase bg-white/5 border-b border-white/10">
+                <tr>
+                  <th class="p-3">Title</th>
+                  <th class="p-3">Category</th>
+                  <th class="p-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminTableBody">
+                <!-- Admin item rows render here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- VIDEO PLAYER MODAL -->
+  <div id="videoModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-card max-w-4xl w-full rounded-2xl overflow-hidden relative border border-white/20">
+      <button onclick="closeVideoModal()" class="absolute top-4 right-4 z-10 bg-black/50 text-white rounded-full p-2 hover:bg-black/80 transition">
+        ✕
+      </button>
+      <div class="p-4 bg-slate-900/50">
+        <video id="modalPlayer" controls class="w-full aspect-video rounded-xl bg-black"></video>
+      </div>
+      <div class="p-6 flex justify-between items-center">
+        <div>
+          <h3 id="modalTitle" class="text-2xl font-bold text-white"></h3>
+          <span id="modalCategory" class="text-xs px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30"></span>
+        </div>
+        <a id="modalDownloadBtn" download href="#" target="_blank" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg transition">
+          Download Video
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // Configured Admin Password
+    const ADMIN_PASSWORD = "sk jual boos";
+
+    // Initial Video Data Store
+    const initialData = [
+      {
+        id: "1",
+        title: "Big Buck Bunny",
+        category: "Movie",
+        poster: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/800px-Big_buck_bunny_poster_big.jpg",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      },
+      {
+        id: "2",
+        title: "Sintel Animated Film",
+        category: "Anime",
+        poster: "https://upload.wikimedia.org/wikipedia/commons/8/8f/Sintel_poster.jpg",
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
+      }
+    ];
+
+    // Load initial data if local storage is empty
+    if (!localStorage.getItem('movielinkbds_videos')) {
+      localStorage.setItem('movielinkbds_videos', JSON.stringify(initialData));
+    }
+
+    function getVideos() {
+      return JSON.parse(localStorage.getItem('movielinkbds_videos')) || [];
+    }
+
+    function saveVideos(videos) {
+      localStorage.setItem('movielinkbds_videos', JSON.stringify(videos));
+    }
+
+    // Navigation Switcher
+    function showSection(sectionId) {
+      document.getElementById('user-site').classList.add('hidden');
+      document.getElementById('admin-site').classList.add('hidden');
+      document.getElementById(sectionId).classList.remove('hidden');
+
+      if (sectionId === 'user-site') {
+        renderUserGallery();
+      }
+    }
+
+    // Render Public Gallery
+    function renderUserGallery(filterText = '') {
+      const videoGrid = document.getElementById('videoGrid');
+      const videos = getVideos();
+      videoGrid.innerHTML = '';
+
+      const filtered = videos.filter(v => v.title.toLowerCase().includes(filterText.toLowerCase()));
+
+      if (filtered.length === 0) {
+        videoGrid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400">No videos available.</div>`;
+        return;
+      }
+
+      filtered.forEach(v => {
+        const card = document.createElement('div');
+        card.className = "glass-card rounded-2xl overflow-hidden hover:scale-[1.02] transition duration-300 flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="relative aspect-[2/3] w-full overflow-hidden">
+              <img src="${v.poster}" alt="${v.title}" class="w-full h-full object-cover">
+              <span class="absolute top-3 left-3 text-xs bg-black/60 backdrop-blur-md text-white px-2.5 py-1 rounded-md border border-white/10 font-semibold">${v.category}</span>
+            </div>
+            <div class="p-4">
+              <h3 class="font-bold text-lg text-white truncate">${v.title}</h3>
+            </div>
+          </div>
+          <div class="p-4 pt-0 grid grid-cols-2 gap-2">
+            <button onclick="openVideoModal('${v.id}')" class="py-2 text-center bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold border border-white/20 transition">
+              Watch Free
+            </button>
+            <a href="${v.videoUrl}" download target="_blank" class="py-2 text-center bg-purple-600/40 hover:bg-purple-600/60 text-purple-200 rounded-xl text-xs font-semibold border border-purple-400/30 transition flex items-center justify-center">
+              Download
+            </a>
+          </div>
+        `;
+        videoGrid.appendChild(card);
+      });
+    }
+
+    function filterVideos() {
+      const query = document.getElementById('searchInput').value;
+      renderUserGallery(query);
+    }
+
+    // Video Player Modal Logic
+    function openVideoModal(id) {
+      const videos = getVideos();
+      const video = videos.find(v => v.id === id);
+      if (!video) return;
+
+      const player = document.getElementById('modalPlayer');
+      player.src = video.videoUrl;
+      document.getElementById('modalTitle').innerText = video.title;
+      document.getElementById('modalCategory').innerText = video.category;
+      document.getElementById('modalDownloadBtn').href = video.videoUrl;
+
+      document.getElementById('videoModal').classList.remove('hidden');
+      player.play();
+    }
+
+    function closeVideoModal() {
+      const player = document.getElementById('modalPlayer');
+      player.pause();
+      player.src = '';
+      document.getElementById('videoModal').classList.add('hidden');
+    }
+
+    // Admin Portal Logic
+    function openAdminPortal() {
+      showSection('admin-site');
+    }
+
+    function verifyAdmin() {
+      const pass = document.getElementById('adminPasscode').value;
+      if (pass === ADMIN_PASSWORD) {
+        document.getElementById('adminLoginBox').classList.add('hidden');
+        document.getElementById('adminDashboard').classList.remove('hidden');
+        renderAdminTable();
+      } else {
+        alert("Incorrect Admin Password!");
+      }
+    }
+
+    function lockAdmin() {
+      document.getElementById('adminPasscode').value = '';
+      document.getElementById('adminLoginBox').classList.remove('hidden');
+      document.getElementById('adminDashboard').classList.add('hidden');
+      showSection('user-site');
+    }
+
+    function handleAddVideo(e) {
+      e.preventDefault();
+      const title = document.getElementById('videoTitle').value;
+      const category = document.getElementById('videoCategory').value;
+      const poster = document.getElementById('videoPoster').value;
+      const videoUrl = document.getElementById('videoUrl').value;
+
+      const newVideo = {
+        id: Date.now().toString(),
+        title,
+        category,
+        poster,
+        videoUrl
+      };
+
+      const videos = getVideos();
+      videos.unshift(newVideo);
+      saveVideos(videos);
+
+      document.getElementById('uploadForm').reset();
+      renderAdminTable();
+      alert("Video Published Successfully!");
+    }
+
+    function deleteVideo(id) {
+      if (confirm("Are you sure you want to remove this video?")) {
+        let videos = getVideos();
+        videos = videos.filter(v => v.id !== id);
+        saveVideos(videos);
+        renderAdminTable();
+      }
+    }
+
+    function renderAdminTable() {
+      const tbody = document.getElementById('adminTableBody');
+      const videos = getVideos();
+      tbody.innerHTML = '';
+
+      videos.forEach(v => {
+        const row = document.createElement('tr');
+        row.className = "border-b border-white/5 hover:bg-white/5";
+        row.innerHTML = `
+          <td class="p-3 font-semibold text-white">${v.title}</td>
+          <td class="p-3">${v.category}</td>
+          <td class="p-3 text-right">
+            <button onclick="deleteVideo('${v.id}')" class="px-3 py-1 bg-red-500/20 text-red-300 border border-red-500/30 hover:bg-red-500/40 rounded-lg text-xs transition">
+              Remove
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Initial load
+    renderUserGallery();
+  </script>
+</body>
+</html>
